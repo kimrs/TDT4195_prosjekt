@@ -21,9 +21,9 @@ img_green = (img_green - mean_green) / std_green;
 img_blue = (img_blue - mean_blue) / std_blue;
 
 % multivariable thresholding
-d = sqrt((img_red - mean_red).^2 + (img_green - mean_green).^2 + (img_blue - mean_blue).^2)
+d = sqrt((img_red - mean_red).^2 + (img_green - mean_green).^2 + (img_blue - mean_blue).^2);
 
 bitmask = d > 1.9;
 
 % fill holes in circles
-bitmask = imfill(bitmask,'holes')
+bitmask = imfill(bitmask,'holes');
