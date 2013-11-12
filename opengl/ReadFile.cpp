@@ -9,11 +9,11 @@
 
 #include "ReadFile.h"
 
-int _tmain(int argc, _TCHAR* argv[])
+/*int _tmain(int argc, _TCHAR* argv[])
 {	
 	/*		--- CODE COPIED FROM ---
 	 * http://support.microsoft.com/kb/99115
-	 */
+	 *
 
 	hStdOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(!GetConsoleScreenBufferInfo(hStdOutput, &csbi))
@@ -28,7 +28,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	_TCHAR * filename = argv[1];
 	char file_name[100];
 
-	wcstombs(file_name, filename, wcslen(argv[1]) + 1);
+	//wcstombs(file_name, filename, wcslen(argv[1]) + 1);
 	printf("%s\n", file_name);
 
 	int *params = read(file_name);
@@ -51,8 +51,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	return 0;
 }
 
-
-int *read(char* filename)
+*/
+FILE *fr;
+float *read(char* filename)
 {
 	int n;
 	long elapsed_seconds;
@@ -60,7 +61,7 @@ int *read(char* filename)
 
 	//int parameters[400]; //100 units per session allowed. 4 parameters per unit. 
 	int parameterCounter = 0;
-	int data[400];
+	float data[400];
 
 	fr = fopen (filename, "rt");  /* open the file for reading */
 	/* elapsed.dta is the name of the file */
@@ -76,20 +77,23 @@ int *read(char* filename)
 
 		if(line[0] == 35) //if '#'
 		{
-			printf("comment\n");
+			//printf("\n");
 		} else
 		{
-			int color = line[0] - '0';
-			int scale = line[1] - '0';
-			int x = (line[2]-'0') * 1000 + 
-					(line[3]-'0') * 100 + 
-					(line[4]-'0') * 10 + 
-					(line[5]-'0');
-			int y = (line[6]-'0') * 1000 + 
-					(line[7]-'0') * 100 + 
-					(line[8]-'0') * 10 + 
-					(line[9]-'0');
+			float color = line[0] - '0';
+			float scale =	(line[1] - '0') * 10 +
+							(line[2] - '0');
 
+			float x = (line[3]-'0') * 1000 + 
+					(line[4]-'0') * 100 + 
+					(line[5]-'0') * 10 + 
+					(line[6]-'0');
+			float y = (line[7]-'0') * 1000 + 
+					(line[8]-'0') * 100 + 
+					(line[9]-'0') * 10 + 
+					(line[10]-'0');
+
+			//printf("%f%f%f%f\n", color, scale, x, y);
 			data[0 + parameterCounter] = color;
 			data[1 + parameterCounter] = scale;
 			data[2 + parameterCounter] = x;

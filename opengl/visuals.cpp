@@ -10,6 +10,7 @@
 #include <time.h>
 #include "shader.hpp"
 #include <vector>
+#include "ReadFile.h"
 
 #define PI 3.14159265359
 #define mouseSpeed 0.00005f
@@ -25,6 +26,9 @@ float DATA[] = {	0.0, 1.0, 1.0, 0.0,
 					1.0, 1.0, 2.0, 0.0,
 					2.0, 1.0, 3.0, 0.0, 
 					3.0, 1.0, 4.0, 0.0	};
+char * filename = "C:\\Users\\Student\\Desktop\\LAB4\\VisualStudio\\project\\MainProject\\Debug\\test.txt";
+float *data;
+
 int length = 16;
 
 
@@ -274,7 +278,11 @@ void DisplayGL()
     {
     case 1:
     {
-        RenderScene(&DATA[0], length);
+		float *d1 = &DATA[0];
+		float *d2 = data;
+		float *d3 = &data[0];
+		
+		RenderScene(data, length);
     }
         break;
 	}
@@ -316,22 +324,30 @@ void RenderScene(float *data, int length)
     // 2nd attribute buffer : colors
     glEnableVertexAttribArray(1);
 
+/*	for(int i = 0; i < length; i++)
+		printf("D:%f", d[i]);*/
+
 	for(int i = 0; i < length / 4; i++)
 	{
-		M = glm::scale(glm::mat4(1.0f),glm::vec3(
-			*(data + (4 * i + S)),
-			1.0,
-			*(data + (4 * i + S))));
+		float* d = read(filename);
+		M = glm::mat4(1.0f);
 
 		M = glm::translate(M,glm::vec3(
-			*(data + (4 * i + X))
+			d[4 * i + X] / 10
 			, 0.0, 
-			*(data + (4 * i + Y))));
+			d[4 * i + Y] / 10));
+
+		M = glm::scale(M,glm::vec3(
+			d[4 * i + S],
+			1.0,
+			d[4 * i + S]));
+
+		int color = d[4 * i + C];
 		
 		MVPUnit = MVP * M;
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVPUnit[0][0]);
 		
-		int color = *(data + (4 * i + C));
+		
 		switch(color)
 		{
 		case 0:
@@ -356,7 +372,6 @@ void RenderScene(float *data, int length)
 			break;
 		}
 
-
 		glVertexAttribPointer(
             1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
             3,                                // size
@@ -376,6 +391,8 @@ void RenderScene(float *data, int length)
 
 void SetupGL() //
 {
+	//data = read(filename);
+
     //Parameter handling
     glShadeModel (GL_SMOOTH);
 
