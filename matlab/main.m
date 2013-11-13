@@ -1,6 +1,6 @@
 close('all');
 % read in image from file
-originalImg = imread('sweetsA01.png');
+originalImg = imread('sweetsA03.png');
 
 % show original
 figure('Name','Original image','NumberTitle','off');imshow(originalImg);
@@ -38,22 +38,21 @@ grayImg = rgb2gray(maskedImage);
 figure('Name','Gray Image','NumberTitle','off'); imshow(grayImg);
 
 % find sweets
-[c,r] = imfindcircles(bitmask,[10,20]);
+[c,r] = imfindcircles(bitmask,[30,30]);
 
 cc=1:80; 
 rr=cc.';
 
 cx1=40; cy1=40; R1=20;
-cx2=10; cy2=10; R2=10;
 
 
-f=@(xx,yy) (xx-cx1).^2+(yy-cy1).^2 <=R1^2 | (xx-cx2).^2+(yy-cy2).^2 <=R2^2 ; 
+f=@(xx,yy) (xx-cx1).^2+(yy-cy1).^2 <=R1^2; 
  
 
 circ=bsxfun(f,rr,cc); %Logical map of 2 circles
-
-C = circlesHough(double(circ),10,20);
-
+size(circ)
+%C = circlesHough(double(circ),5,15);
+C = circlesHough(gaussian(rgb2gray(originalImg),8,2.5),10,30);
 %figure(); imshow(l);
 %display detected circles
 figure('Name','Detected sweets','NumberTitle','off'); imshow(originalImg);viscircles(c,r);

@@ -1,6 +1,6 @@
 % Described here:
 % http://www.cse.iitd.ernet.in/~pkalra/csl783/canny.pdf
-function [J, theta] = edgeCanny(I, highThresh, lowThresh)
+function [J, theta, magnitude] = edgeCanny(I, highThresh, lowThresh)
     
     
     % Smooth image
@@ -19,6 +19,7 @@ function [J, theta] = edgeCanny(I, highThresh, lowThresh)
     
     magnitude = sqrt(Dx.^2+Dy.^2);
     % The direction of edges
+    theta = zeros(size(Dx));
     theta = atand(Dy./Dx);
     
     %figure('Name','Theta','NumberTitle','off'); imshow(theta);
@@ -32,7 +33,7 @@ function [J, theta] = edgeCanny(I, highThresh, lowThresh)
             
             % Putting each angle inside their respective quadrant
        
-            if ((theta(x,y) > 0 && theta(x,y) < 22.5) || (theta(x,y) > 157.5) && (theta(x,y) < -157.5))
+            if ((theta(x,y) > -22.5 && theta(x,y) < 22.5) || (theta(x,y) > 157.5) && (theta(x,y) < -157.5))
                 if (y - 1 > 0 && y + 1 < size(nomaxsup,2))
                     % do a non-maximum suppression
                     if (magnitude(x, y) > magnitude(x, y+1) && magnitude(x, y) > magnitude(x, y-1))
@@ -54,7 +55,7 @@ function [J, theta] = edgeCanny(I, highThresh, lowThresh)
                 end;
             end;
 
-            if ((theta(x,y) > 67.5 && theta(x,y) < 112.5) || (theta(x,y) < -67.5 && theta(x,y) > 112.5))
+            if ((theta(x,y) > 67.5 && theta(x,y) < 112.5) || (theta(x,y) < -67.5 && theta(x,y) > -112.5))
                 if (x - 1 > 0 && x + 1 < size(nomaxsup,1))
                     % do a non-maximum suppression
                     if (magnitude(x, y) > magnitude(x+1, y) && magnitude(x, y) > magnitude(x-1, y))
@@ -115,7 +116,8 @@ function [J, theta] = edgeCanny(I, highThresh, lowThresh)
         end
     end
     
-    figure();imshow(L);
+    %figure('Name','LowThreshold','NumberTitle','off');imshow(L);
+    %figure('Name','HighThreshold','NumberTitle','off');imshow(H);
     
     % Go through the low threshold matrix and see whether the low threshold
     % pixels are adjecent to a high threshold blob. Dooin it twice.
@@ -144,6 +146,6 @@ function [J, theta] = edgeCanny(I, highThresh, lowThresh)
 %     end;
    
     J = H;
-    theta = (H > 0).*(theta)./2.0;
+    theta = ((H > 0).*(theta).*2);
     
     
