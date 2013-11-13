@@ -1,4 +1,6 @@
-function J = edgeCanny(I, highThresh, lowThresh)
+% Described here:
+% http://www.cse.iitd.ernet.in/~pkalra/csl783/canny.pdf
+function [J, theta] = edgeCanny(I, highThresh, lowThresh)
     
     
     % Smooth image
@@ -113,6 +115,8 @@ function J = edgeCanny(I, highThresh, lowThresh)
         end
     end
     
+    figure();imshow(L);
+    
     % Go through the low threshold matrix and see whether the low threshold
     % pixels are adjecent to a high threshold blob. Dooin it twice.
     for x = 1:size(nomaxsup,1)
@@ -127,16 +131,19 @@ function J = edgeCanny(I, highThresh, lowThresh)
         end;
     end;
     
-    for y = 1:size(nomaxsup,2)
-        for x = 1:size(nomaxsup,1)
-            if (x-1 > 0 && y-1 > 0 && y+1 < size(nomaxsup,2) && x+1 < size(nomaxsup,1) && L(x,y) == 1)
-                if (nomaxsup(x,y) > highThresh || nomaxsup(x-1,y) > highThresh || nomaxsup(x-1,y-1) > highThresh || nomaxsup(x,y-1) > highThresh || nomaxsup(x+1,y) > highThresh || nomaxsup(x+1,y+1) > highThresh || nomaxsup(x,y+1) > highThresh || nomaxsup(x-1,y+1) > highThresh || nomaxsup(x+1,y-1) > highThresh)
-                    H(x,y) = 1;
-                else 
-                    H(x,y) = 0;
-                end;
-            end;
-        end;
-    end;
-    
+%     for y = 1:size(nomaxsup,2)
+%         for x = 1:size(nomaxsup,1)
+%             if (x-1 > 0 && y-1 > 0 && y+1 < size(nomaxsup,2) && x+1 < size(nomaxsup,1) && L(x,y) == 1)
+%                 if (nomaxsup(x,y) > highThresh || nomaxsup(x-1,y) > highThresh || nomaxsup(x-1,y-1) > highThresh || nomaxsup(x,y-1) > highThresh || nomaxsup(x+1,y) > highThresh || nomaxsup(x+1,y+1) > highThresh || nomaxsup(x,y+1) > highThresh || nomaxsup(x-1,y+1) > highThresh || nomaxsup(x+1,y-1) > highThresh)
+%                     H(x,y) = 1;
+%                 else 
+%                     H(x,y) = 0;
+%                 end;
+%             end;
+%         end;
+%     end;
+   
     J = H;
+    theta = (H > 0).*(theta)./2.0;
+    
+    

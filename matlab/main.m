@@ -37,10 +37,6 @@ grayImg = rgb2gray(maskedImage);
 
 figure('Name','Gray Image','NumberTitle','off'); imshow(grayImg);
 
-% find edges with canny edge detector
-edges = edgeCanny(grayImg, 0.2, 0.05);
-figure('Name','Original Image','NumberTitle','off'); imshow(edges);
-
 % find sweets
 [c,r] = imfindcircles(bitmask,[10,20]);
 
@@ -56,8 +52,9 @@ f=@(xx,yy) (xx-cx1).^2+(yy-cy1).^2 <=R1^2 | (xx-cx2).^2+(yy-cy2).^2 <=R2^2 ;
 
 circ=bsxfun(f,rr,cc); %Logical map of 2 circles
 
-C = circlesHough(circ);
+C = circlesHough(double(circ),10,20);
 
+%figure(); imshow(l);
 %display detected circles
 figure('Name','Detected sweets','NumberTitle','off'); imshow(originalImg);viscircles(c,r);
 
