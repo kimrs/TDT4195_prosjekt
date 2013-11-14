@@ -60,7 +60,8 @@ only_green  = medianFilter(only_green, 4);
 only_orange = medianFilter(only_orange, 14);
 only_pink   = medianFilter(only_pink, 10);
 
-
+% weird
+only_blue = only_blue & ~only_pink;
 
 output_args = zeros(m, n, 6);
 
