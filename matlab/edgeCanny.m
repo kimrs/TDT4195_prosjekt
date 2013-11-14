@@ -146,6 +146,6 @@ function [J, theta, magnitude] = edgeCanny(I, highThresh, lowThresh)
 %     end;
    
     J = H;
-    theta = ((H > 0).*(theta).*2);
+    theta = ((H > 0).*(theta)./2);
     
     

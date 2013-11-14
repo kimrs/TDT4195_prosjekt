@@ -53,19 +53,19 @@ for i = 1:size(edges,1)
                 dx = dy * tand(theta(i,j));
             end;
             
-            while (sqrt(a^2 + b^2) < max_rad && sqrt(a^2 + b^2) > min_rad)
-                px1 = int16(j + a);
-                px2 = int16(j - a);
-                py1 = int16(j - b);
-                py2 = int16(j + b);
+            while (sqrt(a^2 + b^2) < max_rad)
+                px1 = int32(j + a);
+                px2 = int32(j - a);
+                py1 = int32(i - b);
+                py2 = int32(i + b);
                 
-                if (px1 >= 1 && px1 < size_x && py1 >= 1 && py1 < size_y)
-                    houghDomain(px1,py1) = houghDomain(px1,py1) + magnitude(i,j)./sqrt(a^2+b^2);
+                if (px1 >= 1 && px1 < size_y && py1 >= 1 && py1 < size_x)
+                    houghDomain(py1,px1) = houghDomain(py1,px1) + magnitude(i,j)./sqrt(a^2+b^2);
                 end;
-                if (px2 >= 1 && px2 < size_x && py2 >= 1 && py2 < size_y)
-                    houghDomain(px2,py2) = houghDomain(px2,py2) + magnitude(i,j)./sqrt(a^2+b^2);
+                if (px2 >= 1 && px2 < size_y && py2 >= 1 && py2 < size_x)
+                    houghDomain(py2,px2) = houghDomain(py2,px2) + magnitude(i,j)./sqrt(a^2+b^2);
                 end;
-                 a = a + dx;
+                a = a + dx;
                 b = b + dy;
                 
             end;
@@ -74,22 +74,15 @@ for i = 1:size(edges,1)
     end;
 end;
 figure('Name','Hough','NumberTitle','off');imshow(houghDomain);
-houghDomain = conv2(houghDomain,hat,'same');
-houghDomain = squeeze(max(max(houghDomain)))
-thresh = 0.9;
-if(~isempty(houghDomain))
-    houghDomain = [houghDomain(1);houghDomain;houghDomain(end)];
-    dx = houghDomain(2:end)-houghDomain(1:end-1);
-    zc = max(sign(sign(dx(1:end-1))-sign(dx(2:end))),0);
-    tx = (houghDomain>thresh);
-    maxX = tx(2:end-1).*zc;
-    n = 1:length(maxX);
-    xList =  n(maxX==1);
-else
-    xList = [];
-    maxX = [];
-end
-houghDomain
+%houghDomain = conv2(houghDomain,hat,'same');
+houghDomain = movingAverage(houghDomain);
+bitmask = houghDomain > 0.4;
+bitmask = imclose(bitmask,strel('disk',4));
+bitmask = imopen(bitmask,strel('disk',4));
+
+houghDomain(~bitmask) = 0;
+
+
 %houghpeaks(houghDomain, 100)
 figure('Name','Hough hotspot','NumberTitle','off');imshow(houghDomain);
 C = 0;
