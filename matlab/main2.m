@@ -9,9 +9,9 @@ originalImg = imread([fileToLoad '.png']);
 % scale image to 0-1 values
 originalImg = double(originalImg)/255.0;
 
-%normalizedColors = optimaThreshold(originalImg);
+normalizedColors = optimaThreshold(originalImg);
 
-seperateColoredObjects = separateColors(originalImg);
+seperateColoredObjects = separateColors(normalizedColors);
 
 red_sweets = seperateColoredObjects(:,:,1);
 green_sweets = seperateColoredObjects(:,:,2);
@@ -21,11 +21,18 @@ pink_sweets = seperateColoredObjects(:,:,5);
 orange_sweets = seperateColoredObjects(:,:,6);
 
 red_sweets = imfill(red_sweets,'holes');
-green_sweets = imfill(red_sweets,'holes');
+green_sweets = imfill(green_sweets,'holes');
 blue_sweets = imfill(blue_sweets,'holes');
 yellow_sweets = imfill(yellow_sweets,'holes');
 pink_sweets = imfill(pink_sweets,'holes');
 orange_sweets = imfill(orange_sweets,'holes');
+
+red_sweets = openAndClose(red_sweets);
+green_sweets = openAndClose(green_sweets);
+blue_sweets = openAndClose(blue_sweets);
+yellow_sweets = openAndClose(yellow_sweets);
+pink_sweets = openAndClose(pink_sweets);
+orange_sweets = openAndClose(orange_sweets);
 
 % merge all maskes to one complete mask
 bitmask = red_sweets | green_sweets | blue_sweets | yellow_sweets | pink_sweets | orange_sweets;
@@ -34,11 +41,7 @@ bitmask = red_sweets | green_sweets | blue_sweets | yellow_sweets | pink_sweets 
 % % do a threshold with moving average filter
 % bitmask = optimaThreshold(originalImg);
 % 
-% % Closing and opening filters, to remove some 
-% bitmask = imclose(bitmask,strel('disk',1));
-% bitmask = imopen(bitmask,strel('disk',8));
-% bitmask = imopen(bitmask,strel('disk',8));
-% bitmask = imclose(bitmask,strel('disk',1));
+% 
 
 % create copy of original
 maskedImage = originalImg;
@@ -64,7 +67,7 @@ end
 
 %C = circlesHough(double(circ),20,21);
 
-C = circlesHough(double(bitmask),10,25);
+C = circlesHough(double(bitmask),5,21);
 %figure(); imshow(l);
 %display detected circles
 figure('Name','Detected sweets','NumberTitle','off'); imshow(originalImg);viscircles(c,r);
