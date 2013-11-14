@@ -1,6 +1,5 @@
+% Remove some noise with a median filter. SLOW!
 function [ output_args ] = medianFilter( img, filterSize )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
    [m, n] = size(img);
    output_args = zeros(m, n);
    l = floor(filterSize / 2);
