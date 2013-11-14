@@ -9,9 +9,9 @@ originalImg = imread([fileToLoad '.png']);
 % scale image to 0-1 values
 originalImg = double(originalImg)/255.0;
 
-normalizedColors = optimaThreshold(originalImg);
+%normalizedColors = optimaThreshold(originalImg);
 
-seperateColoredObjects = separateColors(normalizedColors);
+seperateColoredObjects = separateColors(originalImg);
 
 red_sweets = seperateColoredObjects(:,:,1);
 green_sweets = seperateColoredObjects(:,:,2);
@@ -39,12 +39,12 @@ for i = 1:1:3
 end
 
 % find sweets in every color
-[red_c,red_r] = imfindcircles(red_sweets,[10,30]);
-[green_c,green_r] = imfindcircles(green_sweets,[10,30]);
-[blue_c,blue_r] = imfindcircles(blue_sweets,[10,30]);
-[yellow_c,yellow_r] = imfindcircles(yellow_sweets,[10,30]);
-[pink_c,pink_r] = imfindcircles(pink_sweets,[10,30]);
-[orange_c,orange_r] = imfindcircles(orange_sweets,[10,30]);
+[red_c,red_r] = imfindcircles(red_sweets,[3,23]);
+[green_c,green_r] = imfindcircles(green_sweets,[2,22]);
+[blue_c,blue_r] = imfindcircles(blue_sweets,[3,23]);
+[yellow_c,yellow_r] = imfindcircles(yellow_sweets,[3,23]);
+[pink_c,pink_r] = imfindcircles(pink_sweets,[3,23]);
+[orange_c,orange_r] = imfindcircles(orange_sweets,[2,22]);
 
 % self implemented hough
 %C = circlesHough(double(bitmask),12,21);
@@ -73,7 +73,9 @@ imwrite(orange_sweets,['results/' fileToLoad '_orange_sweets.png']);
 
 % write coordinates for the circles to file
 % colorstate, radius, x-pos, y-pos
+%fileName = [fileToLoad '_test.txt'];
 fileName = 'test.txt';
+
 fileId = fopen(fileName,'w');
 if fileId ~= -1
     for i = 1:size(red_c,1)
