@@ -34,7 +34,8 @@ int length = 4*100;
 
 // This will be used with shader
 //GLuint VertexArrayID;
-GLuint vertexbuffer, colorbuffer, redbuffer, bluebuffer, yellowbuffer, greenbuffer, pinkbuffer, orangebuffer;
+GLuint	shape1buffer, shape2buffer, shape3buffer,  shape4buffer, shape5buffer, shape6buffer, 
+		colorbuffer, redbuffer, bluebuffer, yellowbuffer, greenbuffer, pinkbuffer, orangebuffer;
 GLuint objvertexbuffer; // for obj
 GLuint programID_1, programID_2;
 
@@ -296,7 +297,7 @@ void DisplayGL()
 
 void RenderScene(float *data, int length)
 {
-	glClearColor( 0.4f, 0.4f, 0.4f, 1.0f );
+    glClearColor( 0.4f, 0.4f, 0.4f, 1.0f );
     // Enable bac-face culling
     glEnable(GL_CULL_FACE);
     // Enable depth test
@@ -304,103 +305,168 @@ void RenderScene(float *data, int length)
     // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
     Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.01f, 1000.0f);
     // Model matrix : an identity matrix (model will be at the origin)
-    Model      = glm::mat4(1.0f);
+    Model = glm::mat4(1.0f);
     // Our ModelViewProjection : multiplication of our 3 matrices
-    MVP        = Projection * View * Model; // Remember, matrix multiplication is the other way around
+    MVP = Projection * View * Model; // Remember, matrix multiplication is the other way around
     // Use our shader
     glUseProgram(programID_1);
     // 1rst attribute buffer : vertices
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glVertexAttribPointer(
-                0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-                3,                  // size
-                GL_FLOAT,           // type
-                GL_FALSE,           // normalized?
-                0,                  // stride
-                (void*)0            // array buffer offset
-                );
+    //glEnableVertexAttribArray(0);
+    //glBindBuffer(GL_ARRAY_BUFFER, shape1buffer);
+    //glVertexAttribPointer(
+    //            0, // attribute. No particular reason for 0, but must match the layout in the shader.
+    //            3, // size
+    //            GL_FLOAT, // type
+    //            GL_FALSE, // normalized?
+    //            0, // stride
+    //            (void*)0 // array buffer offset
+    //            );
 
     // 2nd attribute buffer : colors
     glEnableVertexAttribArray(1);
 
-/*	for(int i = 0; i < length; i++)
-		printf("D:%f", d[i]);*/
+/*        for(int i = 0; i < length; i++)
+                printf("D:%f", d[i]);*/
 
-	for(int i = 0; i < length / 4; i++)
-	{
-		if(i == 38)
-			printf("");
+        for(int i = 0; i < length / 4; i++)
+        {
+                if(i == 38)
+                        printf("");
 
-		float* d = read(filename, i);
-		M = glm::mat4(1.0f);
+                float* d = read(filename, i);
+                M = glm::mat4(1.0f);
 
-		M = glm::translate(M,glm::vec3(
-			d[0 + X] / 100
-			, 0.0, 
-			d[0 + Y] / 100));
+                M = glm::translate(M,glm::vec3(
+                        d[0 + X] / 100
+                        , 0.0,
+                        d[0 + Y] / 100));
 
-		M = glm::scale(M,glm::vec3(
-			d[0 + S] * 3/ 100,
-			0.1,
-			d[0 + S] * 3/ 100));
+                M = glm::scale(M,glm::vec3(
+                        d[0 + S] * 3/ 100,
+                        d[0 + S] * 3/ 100,
+                        d[0 + S] * 3/ 100));
 
-		int color = d[0 + C];
-		
-		MVPUnit = MVP * M;
-		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVPUnit[0][0]);
-		
-		
-		switch(color)
-		{
-		case 4:
-		{
-			glBindBuffer(GL_ARRAY_BUFFER, yellowbuffer);
-		}
-			break;
-		case 1:
-		{
-			glBindBuffer(GL_ARRAY_BUFFER, redbuffer);
-		}
-			break;
-		case 3:
-		{
-			glBindBuffer(GL_ARRAY_BUFFER, bluebuffer);
-		}
-			break;
-		case 2:
-		{
-			glBindBuffer(GL_ARRAY_BUFFER, greenbuffer);
-		}
-			break;
-		
-		case 5:
-		{
-			glBindBuffer(GL_ARRAY_BUFFER, pinkbuffer);
-		}	break;
-		
-		case 6:
-		{
-			glBindBuffer(GL_ARRAY_BUFFER, orangebuffer);
-		}	break;
-		}
+                int color = d[0 + C];
+                
+                MVPUnit = MVP * M;
+                glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVPUnit[0][0]);
+                
+                
+                switch(color)
+                {
+                case 4:
+                {
+						// 1rst attribute buffer : vertices
+						glEnableVertexAttribArray(0);
+						glBindBuffer(GL_ARRAY_BUFFER, shape4buffer);
+						glVertexAttribPointer(
+									0, // attribute. No particular reason for 0, but must match the layout in the shader.
+									3, // size
+									GL_FLOAT, // type
+									GL_FALSE, // normalized?
+									0, // stride
+									(void*)0 // array buffer offset
+									);
+                        glBindBuffer(GL_ARRAY_BUFFER, yellowbuffer);
+                }
+                        break;
+                case 1:
+                {
+						// 1rst attribute buffer : vertices
+						glEnableVertexAttribArray(0);
+						glBindBuffer(GL_ARRAY_BUFFER, shape1buffer);
+						glVertexAttribPointer(
+									0, // attribute. No particular reason for 0, but must match the layout in the shader.
+									3, // size
+									GL_FLOAT, // type
+									GL_FALSE, // normalized?
+									0, // stride
+									(void*)0 // array buffer offset
+									);
+						glBindBuffer(GL_ARRAY_BUFFER, redbuffer);
+                }
+                        break;
+                case 3:
+                {
+						// 1rst attribute buffer : vertices
+						glEnableVertexAttribArray(0);
+						glBindBuffer(GL_ARRAY_BUFFER, shape3buffer);
+						glVertexAttribPointer(
+									0, // attribute. No particular reason for 0, but must match the layout in the shader.
+									3, // size
+									GL_FLOAT, // type
+									GL_FALSE, // normalized?
+									0, // stride
+									(void*)0 // array buffer offset
+									);
+                        glBindBuffer(GL_ARRAY_BUFFER, bluebuffer);
+                }
+                        break;
+                case 2:
+                {
+						// 1rst attribute buffer : vertices
+						glEnableVertexAttribArray(0);
+						glBindBuffer(GL_ARRAY_BUFFER, shape2buffer);
+						glVertexAttribPointer(
+									0, // attribute. No particular reason for 0, but must match the layout in the shader.
+									3, // size
+									GL_FLOAT, // type
+									GL_FALSE, // normalized?
+									0, // stride
+									(void*)0 // array buffer offset
+									);
+                        glBindBuffer(GL_ARRAY_BUFFER, greenbuffer);
+                }
+                        break;
+                
+                case 5:
+                {
+						// 1rst attribute buffer : vertices
+						glEnableVertexAttribArray(0);
+						glBindBuffer(GL_ARRAY_BUFFER, shape5buffer);
+						glVertexAttribPointer(
+									0, // attribute. No particular reason for 0, but must match the layout in the shader.
+									3, // size
+									GL_FLOAT, // type
+									GL_FALSE, // normalized?
+									0, // stride
+									(void*)0 // array buffer offset
+									);
+                        glBindBuffer(GL_ARRAY_BUFFER, pinkbuffer);
+                }        break;
+                
+                case 6:
+                {
+						// 1rst attribute buffer : vertices
+						glEnableVertexAttribArray(0);
+						glBindBuffer(GL_ARRAY_BUFFER, shape6buffer);
+						glVertexAttribPointer(
+									0, // attribute. No particular reason for 0, but must match the layout in the shader.
+									3, // size
+									GL_FLOAT, // type
+									GL_FALSE, // normalized?
+									0, // stride
+									(void*)0 // array buffer offset
+									);
+                        glBindBuffer(GL_ARRAY_BUFFER, orangebuffer);
+                }        break;
+                }
 
-		glVertexAttribPointer(
-            1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
-            3,                                // size
-            GL_FLOAT,                         // type
-            GL_FALSE,                         // normalized?
-            0,                                // stride
-            (void*)0                          // array buffer offset
+                glVertexAttribPointer(
+            1, // attribute. No particular reason for 1, but must match the layout in the shader.
+            3, // size
+            GL_FLOAT, // type
+            GL_FALSE, // normalized?
+            0, // stride
+            (void*)0 // array buffer offset
             );
 
-		glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indices starting at 0 -> 12 triangles
-	}
+                glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indices starting at 0 -> 12 triangles
+        }
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
 }
-
 
 void SetupGL() //
 {
@@ -463,76 +529,277 @@ void SetupGL() //
 
 	const float MULT = 0.4f;
     //VBO -- VERTEX
-	double radius = RADIUS;
-    static const GLfloat g_vertex_buffer_data[] = {
-        -radius,	-radius, -radius, // triangle 1 : begin
-        -radius,	-radius, radius,
-        -radius,	 radius, radius, // triangle 1 : end
+	double r = RADIUS;
+    static const GLfloat g_shape1_buffer_data[] = {
+        -r,	-r, -r, // triangle 1 : begin
+        -r,	-r, r,
+        -r,	 r, r, // triangle 1 : end
         
-		 radius,	 radius,-radius, // triangle 2 : begin
-        -radius,	-radius,-radius,
-        -radius,	 radius,-radius, // triangle 2 : end
+		 r,	 r,-r, // triangle 2 : begin
+        -r,	-r,-r,
+        -r,	 r,-r, // triangle 2 : end
          
-		 radius,	-radius, radius,
-        -radius,	-radius,-radius,
-         radius,	-radius,-radius,
+		 r,	-r, r,
+        -r,	-r,-r,
+         r,	-r,-r,
          
-		 radius,	 radius,-radius,
-         radius,	-radius,-radius,
-        -radius,	-radius,-radius,
+		 r,	 r,-r,
+         r,	-r,-r,
+        -r,	-r,-r,
         
-		-radius,	-radius,-radius,
-        -radius,	 radius, radius,
-        -radius,	 radius,-radius,
+		-r,	-r,-r,
+        -r,	 r, r,
+        -r,	 r,-r,
         
-		 radius,	-radius, radius,
-        -radius,	-radius, radius,
-        -radius,	-radius,-radius,
+		 r,	-r, r,
+        -r,	-r, r,
+        -r,	-r,-r,
         
-		-radius,	 radius, radius,
-        -radius,	-radius, radius,
-         radius,	-radius, radius,
+		-r,	 r, r,
+        -r,	-r, r,
+         r,	-r, r,
         
-		 radius,	 radius, radius,
-         radius,	-radius,-radius,
-         radius,	 radius,-radius,
+		 r,	 r, r,
+         r,	-r,-r,
+         r,	 r,-r,
          
-		 radius,	-radius,-radius,
-         radius,	 radius, radius,
-         radius,	-radius, radius,
+		 r,	-r,-r,
+         r,	 r, r,
+         r,	-r, r,
          
-		 radius,	 radius, radius,
-         radius,	 radius,-radius,
-        -radius,	 radius,-radius,
+		 r,	 r, r,
+         r,	 r,-r,
+        -r,	 r,-r,
          
-		 radius,	 radius, radius,
-        -radius,	 radius,-radius,
-        -radius,	 radius, radius,
+		 r,	 r, r,
+        -r,	 r,-r,
+        -r,	 r, r,
          
-		 radius,	 radius, radius,
-        -radius,	 radius, radius,
-         radius,	-radius, radius, //12*3
+		 r,	 r, r,
+        -r,	 r, r,
+         r,	-r, r, //12*3
+
+    };
+	
+	float o = 0.1f;
+
+	static const GLfloat g_shape2_buffer_data[] = {
+        -r ,	 r,		-r, // floor : begin
+         r,		 r,		-r,
+		-r ,	 r,		 r, 
+        
+        -r,		 r,		 r,
+		 r,		 r,		-r, 
+		 r,		 r,		 r, //floor: end
+
+		 r,		 r,		-r, //side 1
+		-r,		 r,		-r,
+		 0,		-r,		 0,
+
+		 r,		 r,		 r,
+		 r,		 r,		-r,
+		 0,		-r,		 0,
+
+		-r,		 r,		 r,
+		 r,		 r,		 r,
+		 0,		-r,		 0,
+
+		-r,		 r,		-r,
+		-r,		 r,		 r,
+		 0,		-r,		 0,
+
+		-r,		-r + r*2,		-r,
+		 r,		-r + r*2,		-r, //side 1
+		 0,		 r + r*2,		 0,
+
+		 r,		-r + r*2,		-r,
+		 r,		-r + r*2,		 r,
+		 0,		 r + r*2,		 0,
+
+		 r,		-r + r*2,		 r,
+		-r,		-r + r*2,		 r,
+		 0,		 r + r*2,		 0,
+
+		-r,		-r + r*2,		 r,
+		-r,		-r + r*2,		-r,
+		 0,		 r + r*2,		 0
 
     };
 
+	static const GLfloat g_shape3_buffer_data[] = {
+        -r - o,	-r, -r - o, // triangle 1 : begin
+        -r - o,	-r, r - o,
+        -r + o,	 r, r + o, // triangle 1 : end
+        
+		 r + o,	 r,-r + o, // triangle 2 : begin
+        -r - o,	-r,-r - o,
+        -r + o,	 r,-r + o, // triangle 2 : end
+         
+		 r - o,	-r, r - o,
+        -r - o,	-r,-r - o,
+         r - o,	-r,-r - o,
+         
+		 r + o,	 r,-r + o,
+         r - o,	-r,-r - o,
+        -r - o,	-r,-r - o,
+        
+		-r - o,	-r,-r - o,
+        -r + o,	 r, r + o,
+        -r + o,	 r,-r + o,
+        
+		 r - o,	-r, r - o,
+        -r - o,	-r, r - o,
+        -r - o,	-r,-r - o,
+        
+		-r + o,	 r, r + o,
+        -r - o,	-r, r - o,
+         r - o,	-r, r - o,
+        
+		 r + o,	 r, r + o,
+         r - o,	-r,-r - o,
+         r + o,	 r,-r + o,
+         
+		 r - o,	-r,-r - o,
+         r + o,	 r, r + o,
+         r - o,	-r, r - o,
+         
+		 r + o,	 r, r + o,
+         r + o,	 r,-r + o,
+        -r + o,	 r,-r + o,
+         
+		 r + o,	 r, r + o,
+        -r + o,	 r,-r + o,
+        -r + o,	 r, r + o,
+         
+		 r + o,	 r, r + o,
+        -r + o,	 r, r + o,
+         r - o,	-r, r - o, //12*3
+
+    };
+
+		static const GLfloat g_shape4_buffer_data[] = {
+        -r ,	-r,		-r, // floor : begin
+         r,		-r,		-r,
+		-r ,	-r,		 r, 
+        
+        -r,		-r,		 r,
+		 r,		-r,		-r, 
+		 r,		-r,		 r, //floor: end
+
+		 r,		-r,		-r, //side 1
+		-r,		-r,		-r,
+		 0,		 r,		 0,
+
+		 r,		-r,		 r,
+		 r,		-r,		-r,
+		 0,		 r,		 0,
+
+		-r,		-r,		 r,
+		 r,		-r,		 r,
+		 0,		 r,		 0,
+
+		-r,		-r,		-r,
+		-r,		-r,		 r,
+		 0,		 r,		 0
+    };
+
+		static const GLfloat g_shape5_buffer_data[] = {
+        -r ,	 r,		-r, // floor : begin
+         r,		 r,		-r,
+		-r ,	 r,		 r, 
+        
+        -r,		 r,		 r,
+		 r,		 r,		-r, 
+		 r,		 r,		 r, //floor: end
+
+		 r,		 r,		-r, //side 1
+		-r,		 r,		-r,
+		 0,		-r,		 0,
+
+		 r,		 r,		 r,
+		 r,		 r,		-r,
+		 0,		-r,		 0,
+
+		-r,		 r,		 r,
+		 r,		 r,		 r,
+		 0,		-r,		 0,
+
+		-r,		 r,		-r,
+		-r,		 r,		 r,
+		 0,		-r,		 0
+
+    };
+
+		static const GLfloat g_shape6_buffer_data[] = {
+        -r ,	 r,		-r, // floor : begin
+         r,		 r,		-r,
+		-r ,	 r,		 r, 
+        
+        -r,		 r,		 r,
+		 r,		 r,		-r, 
+		 r,		 r,		 r, //floor: end
+
+		 r,		 r,		-r, //side 1
+		-r,		 r,		-r,
+		 0,		-r,		 0,
+
+		 r,		 r,		 r,
+		 r,		 r,		-r,
+		 0,		-r,		 0,
+
+		-r,		 r,		 r,
+		 r,		 r,		 r,
+		 0,		-r,		 0,
+
+		-r,		 r,		-r,
+		-r,		 r,		 r,
+		 0,		-r,		 0,
+
+        -r ,	-r,		-r, // floor : begin
+         r,		-r,		-r,
+		-r ,	-r,		 r, 
+        
+        -r,		-r,		 r,
+		 r,		-r,		-r, 
+		 r,		-r,		 r, //floor: end
+
+		 r,		-r,		-r, //side 1
+		-r,		-r,		-r,
+		 0,		 r,		 0,
+
+		 r,		-r,		 r,
+		 r,		-r,		-r,
+		 0,		 r,		 0,
+
+		-r,		-r,		 r,
+		 r,		-r,		 r,
+		 0,		 r,		 0,
+
+		-r,		-r,		-r,
+		-r,		-r,		 r,
+		 0,		 r,		 0
+
+    };
+
+
 	static const GLfloat red_buffer_data[] = {
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		6.0f,	 0.0f,	  0.0f,
-		1.0f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
+		0.8f,	 0.0f,	  0.0f,
 		1.0f,	 0.0f,	  0.0f,
 		1.0f,	 0.0f,	  0.0f,
 		1.0f,	 0.0f,	  0.0f,
@@ -910,14 +1177,55 @@ void SetupGL() //
 		1.0f,	 1.0f,	  0.0f,
 		1.0f,	 1.0f,	  0.0f,
 	};
-
-    // Generate 1 buffer, put the resulting identifier in vertexbuffer
-    glGenBuffers(1, &vertexbuffer);
+    
+	// Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &shape1buffer);
     // The following commands will talk about our 'vertexbuffer' buffer
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, shape1buffer);
     // Give our vertices to OpenGL.
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_shape1_buffer_data), g_shape1_buffer_data, GL_STATIC_DRAW);
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+
+		// Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &shape2buffer);
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, shape2buffer);
+    // Give our vertices to OpenGL.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_shape2_buffer_data), g_shape2_buffer_data, GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+
+	// Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &shape3buffer);
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, shape3buffer);
+    // Give our vertices to OpenGL.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_shape3_buffer_data), g_shape3_buffer_data, GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+
+	// Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &shape4buffer);
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, shape4buffer);
+    // Give our vertices to OpenGL.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_shape4_buffer_data), g_shape4_buffer_data, GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+
+	// Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &shape5buffer);
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, shape5buffer);
+    // Give our vertices to OpenGL.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_shape5_buffer_data), g_shape5_buffer_data, GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+
+	// Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &shape6buffer);
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, shape6buffer);
+    // Give our vertices to OpenGL.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_shape6_buffer_data), g_shape6_buffer_data, GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+
 
     // Generate 1 buffer, put the resulting identifier in vertexbuffer
     glGenBuffers(1, &colorbuffer);
