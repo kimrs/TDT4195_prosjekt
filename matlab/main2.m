@@ -20,19 +20,6 @@ yellow_sweets = seperateColoredObjects(:,:,4);
 pink_sweets = seperateColoredObjects(:,:,5);
 orange_sweets = seperateColoredObjects(:,:,6);
 
-red_sweets = imfill(red_sweets,'holes');
-green_sweets = imfill(green_sweets,'holes');
-blue_sweets = imfill(blue_sweets,'holes');
-yellow_sweets = imfill(yellow_sweets,'holes');
-pink_sweets = imfill(pink_sweets,'holes');
-orange_sweets = imfill(orange_sweets,'holes');
-
-red_sweets = openAndClose(red_sweets);
-green_sweets = openAndClose(green_sweets);
-blue_sweets = openAndClose(blue_sweets);
-yellow_sweets = openAndClose(yellow_sweets);
-pink_sweets = openAndClose(pink_sweets);
-orange_sweets = openAndClose(orange_sweets);
 
 % merge all maskes to one complete mask
 bitmask = red_sweets | green_sweets | blue_sweets | yellow_sweets | pink_sweets | orange_sweets;
@@ -51,31 +38,32 @@ for i = 1:1:3
     maskedImage(:,:,i) = double(originalImg(:,:,i).*bitmask);
 end
 
-% find sweets
-[c,r] = imfindcircles(bitmask,[10,30]);
+% find sweets in every color
+[red_c,red_r] = imfindcircles(red_sweets,[10,30]);
+[green_c,green_r] = imfindcircles(green_sweets,[10,30]);
+[blue_c,blue_r] = imfindcircles(blue_sweets,[10,30]);
+[yellow_c,yellow_r] = imfindcircles(yellow_sweets,[10,30]);
+[pink_c,pink_r] = imfindcircles(pink_sweets,[10,30]);
+[orange_c,orange_r] = imfindcircles(orange_sweets,[10,30]);
 
-% cc=1:80; 
-% rr=cc.';
-% 
-% cx1=40; cy1=40; R1=20;
-% 
-% 
-% f=@(xx,yy) (xx-cx1).^2+(yy-cy1).^2 <=R1^2; 
-%  
-% 
-% circ=bsxfun(f,rr,cc); %Logical map of 2 circles
+% self implemented hough
+%C = circlesHough(double(bitmask),12,21);
 
-%C = circlesHough(double(circ),20,21);
-
-C = circlesHough(double(bitmask),5,21);
-%figure(); imshow(l);
 %display detected circles
-figure('Name','Detected sweets','NumberTitle','off'); imshow(originalImg);viscircles(c,r);
+f = figure('Name','Detected sweets','NumberTitle','off','visible','off'); imshow(originalImg);
+viscircles(red_c,red_r,'EdgeColor','r');
+viscircles(green_c,green_r,'EdgeColor','g');
+viscircles(blue_c,blue_r,'EdgeColor','b');
+viscircles(yellow_c,yellow_r,'EdgeColor','yellow');
+viscircles(pink_c,pink_r,'EdgeColor',[1,0.4,0.6]);
+viscircles(orange_c,orange_r,'EdgeColor',[1,0.56,0]);
+detectedSweets = getframe(f);
 
 % Write images to files.
 imwrite(originalImg,['results/' fileToLoad '_original.png']);
 imwrite(maskedImage,['results/' fileToLoad '_masked.png']);
 imwrite(bitmask,['results/' fileToLoad '_total_mask.png']);
+imwrite(detectedSweets.cdata,['results/' fileToLoad '_detected_sweets.png']);
 imwrite(red_sweets,['results/' fileToLoad '_red_sweets.png']);
 imwrite(green_sweets,['results/' fileToLoad '_green_sweets.png']);
 imwrite(blue_sweets,['results/' fileToLoad '_blue_sweets.png']);
@@ -88,8 +76,23 @@ imwrite(orange_sweets,['results/' fileToLoad '_orange_sweets.png']);
 fileName = 'test.txt';
 fileId = fopen(fileName,'w');
 if fileId ~= -1
-    for i = 1:size(c,1)
-      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',1,int16(r(i,1)),int16(c(i,1)),int16(c(i,2)));
+    for i = 1:size(red_c,1)
+      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',1,int16(red_r(i,1)),int16(red_c(i,1)),int16(red_c(i,2)));
+    end;
+    for i = 1:size(green_c,1)
+      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',2,int16(green_r(i,1)),int16(green_c(i,1)),int16(green_c(i,2)));
+    end;
+    for i = 1:size(blue_c,1)
+      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',3,int16(blue_r(i,1)),int16(blue_c(i,1)),int16(blue_c(i,2)));
+    end;
+    for i = 1:size(yellow_c,1)
+      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',4,int16(yellow_r(i,1)),int16(yellow_c(i,1)),int16(yellow_c(i,2)));
+    end;
+    for i = 1:size(pink_c,1)
+      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',5,int16(pink_r(i,1)),int16(pink_c(i,1)),int16(pink_c(i,2)));
+    end;
+    for i = 1:size(orange_c,1)
+      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',6,int16(orange_r(i,1)),int16(orange_c(i,1)),int16(orange_c(i,2)));
     end;
     fclose(fileId);
 end

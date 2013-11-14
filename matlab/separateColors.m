@@ -61,7 +61,26 @@ only_orange = medianFilter(only_orange, 14);
 only_pink   = medianFilter(only_pink, 10);
 
 % weird
+
+only_red = imfill(only_red,'holes');
+only_green = imfill(only_green,'holes');
+only_blue = imfill(only_blue,'holes');
+only_yellow = imfill(only_yellow,'holes');
+only_pink = imfill(only_pink,'holes');
+only_orange = imfill(only_orange,'holes');
+
 only_blue = only_blue & ~only_pink;
+only_pink = only_pink & ~only_red;
+
+only_red = openAndClose(only_red);
+only_green = openAndClose(only_green);
+only_blue = openAndClose(only_blue);
+only_yellow = openAndClose(only_yellow);
+only_pink = openAndClose(only_pink);
+only_orange = openAndClose(only_orange);
+
+
+
 
 output_args = zeros(m, n, 6);
 
