@@ -13,7 +13,7 @@ By reading the txt-file each time the scene is rendered, the program is able to 
 This is done by modifying the txt-file. 
 Each cube needs four parameters to be represented.
 One for color, one for radius, one for the x-coordinate and one for the y-coordinate. 
-After setting the values, a model-matrixfor the cube is made. 
+After setting the values, a model-matrix for the cube is made. 
 The model-matrix consists of an identity-matrix multiplyed with a translation-matrix, multiplyed with a scale-matrix. 
 The model-matrix for the cube represents the radius and position of the object. 
 After multiplying the model-matrix with the mvp-matrix, a collor-buffer is bound before drawing the cube. 
