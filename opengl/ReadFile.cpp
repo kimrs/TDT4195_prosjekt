@@ -53,7 +53,7 @@
 
 */
 FILE *fr;
-float *read(char* filename)
+float *read(char* filename, int c)
 {
 	int n;
 	long elapsed_seconds;
@@ -66,9 +66,10 @@ float *read(char* filename)
 	fr = fopen (filename, "rt");  /* open the file for reading */
 	/* elapsed.dta is the name of the file */
 	/* "rt" means open the file for reading text */
-
+	int i = -1;
 	while(fgets(line, 80, fr) != NULL)
 	{
+		i++;
 		/* get a line, up to 80 chars from fr.  done if NULL */
 		sscanf (line, "%ld", &elapsed_seconds);
 		/* convert the string to a long int */
@@ -78,7 +79,7 @@ float *read(char* filename)
 		if(line[0] == 35) //if '#'
 		{
 			//printf("\n");
-		} else
+		} else if(i == c)
 		{
 			float color = line[0] - '0';
 			float scale =	(line[1] - '0') * 10 +

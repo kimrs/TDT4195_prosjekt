@@ -1,8 +1,29 @@
 \section{OpenGL}
-The program created in this part of the assignment, is made by modifying code given to us for the graphics part of the course. Color-buffers and a vertex-buffer is first created. For each frame, RenderScene is called. The text-file is then read using ReadFile.cpp. ReadFile uses the windows library conio.h to read the file. This causes the program to not support other operating systems. It returns a pointer to the first parameter used to represent a cube. Each cube requires four parameters to be represented. One for color, one for radius, one for the x-coordinate and one for the y-coordinate. After setting the values, a model-matrixfor the cube is made. The model-matrix consists of an identity-matrix multiplyes with a translation-matrix, multiplyed with a scale-matrix. The model-matrix for the cube represents the radius and position of the object. After multiplying the model-matrix with the mvp-matrix, a collor-buffer is bound before drawing the cube. The process is repeated until all objects are represented. 
+The program created for this part of the assignment, 
+is made by modifying code given to us for the graphics part of the course. 
+The color-buffers and the vertex-buffer is created in the initialization phase. 
+For each frame, RenderScene is called. 
+The txt-file is read once for each object everytime RenderScene is called.
+The text-file is read using ReadFile.cpp.
+ReadFile uses the windows library conio.h to read the file. 
+The read function used to get the values, requires an integer representing a line in the .txt as input.
+Parameters requiered to represent the object is extracted from that line, and placed in a array.
+A pointer to the first parameter is then returned.
+By reading the txt-file each time the scene is rendered, the program is able to change the scene while running.
+This is done by modifying the txt-file. 
+Each cube needs four parameters to be represented.
+One for color, one for radius, one for the x-coordinate and one for the y-coordinate. 
+After setting the values, a model-matrixfor the cube is made. 
+The model-matrix consists of an identity-matrix multiplyed with a translation-matrix, multiplyed with a scale-matrix. 
+The model-matrix for the cube represents the radius and position of the object. 
+After multiplying the model-matrix with the mvp-matrix, a collor-buffer is bound before drawing the cube. 
+The process is repeated until all objects are represented. 
 
 
 \subsection{Improvements}
-Today, the cubes are given color by static premade color-buffers. To support all colors, one buffer for each different color given in the input-file should be made. This solution was considered, but because of memoryleaks in the program, the values from the file where overwritten. Lack of experience programming in the C-language, caused us to accept our program not being able to support more colors.
+Today, the cubes are given color by static premade color-buffers. 
+To support all colors, one buffer for each different color given in the input-file should be made. 
+This solution was considered, but because of memoryleaks in the program, the values from the file where overwritten. 
+Lack of experience programming in the C-language, resulted in our program not being able to support dynamically made colorbuffers.
 
 

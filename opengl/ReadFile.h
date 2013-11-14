@@ -2,4 +2,5 @@
 //HANDLE hStdOutput;
 //BOOL bUsePause;
 
-float *read(char * filename);
+float *read(char * filename, int c);
+

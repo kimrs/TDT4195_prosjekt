@@ -29,12 +29,12 @@ float DATA[] = {	0.0, 1.0, 1.0, 0.0,
 char * filename = "C:\\Users\\Student\\Desktop\\LAB4\\VisualStudio\\project\\MainProject\\Debug\\test.txt";
 float *data;
 
-int length = 16;
+int length = 4*100;
 
 
 // This will be used with shader
 //GLuint VertexArrayID;
-GLuint vertexbuffer, colorbuffer, redbuffer, bluebuffer, yellowbuffer, greenbuffer;
+GLuint vertexbuffer, colorbuffer, redbuffer, bluebuffer, yellowbuffer, greenbuffer, pinkbuffer, orangebuffer;
 GLuint objvertexbuffer; // for obj
 GLuint programID_1, programID_2;
 
@@ -329,20 +329,23 @@ void RenderScene(float *data, int length)
 
 	for(int i = 0; i < length / 4; i++)
 	{
-		float* d = read(filename);
+		if(i == 38)
+			printf("");
+
+		float* d = read(filename, i);
 		M = glm::mat4(1.0f);
 
 		M = glm::translate(M,glm::vec3(
-			d[4 * i + X] / 10
+			d[0 + X] / 100
 			, 0.0, 
-			d[4 * i + Y] / 10));
+			d[0 + Y] / 100));
 
 		M = glm::scale(M,glm::vec3(
-			d[4 * i + S],
-			1.0,
-			d[4 * i + S]));
+			d[0 + S] * 3/ 100,
+			0.1,
+			d[0 + S] * 3/ 100));
 
-		int color = d[4 * i + C];
+		int color = d[0 + C];
 		
 		MVPUnit = MVP * M;
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVPUnit[0][0]);
@@ -350,7 +353,7 @@ void RenderScene(float *data, int length)
 		
 		switch(color)
 		{
-		case 0:
+		case 4:
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, yellowbuffer);
 		}
@@ -360,16 +363,26 @@ void RenderScene(float *data, int length)
 			glBindBuffer(GL_ARRAY_BUFFER, redbuffer);
 		}
 			break;
-		case 2:
+		case 3:
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, bluebuffer);
 		}
 			break;
-		case 3:
+		case 2:
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, greenbuffer);
 		}
 			break;
+		
+		case 5:
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, pinkbuffer);
+		}	break;
+		
+		case 6:
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, orangebuffer);
+		}	break;
 		}
 
 		glVertexAttribPointer(
@@ -503,8 +516,22 @@ void SetupGL() //
     };
 
 	static const GLfloat red_buffer_data[] = {
-
-		1.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
+		6.0f,	 0.0f,	  0.0f,
 		1.0f,	 0.0f,	  0.0f,
 		1.0f,	 0.0f,	  0.0f,
 		1.0f,	 0.0f,	  0.0f,
@@ -543,18 +570,30 @@ void SetupGL() //
 
 	static const GLfloat blue_buffer_data[] = {
 
-		0.0f,	 0.0f,	  1.0f,
-		0.0f,	 0.0f,	  1.0f,
-		0.0f,	 0.0f,	  1.0f,
-		0.0f,	 0.0f,	  1.0f,
-		0.0f,	 0.0f,	  1.0f,
-		0.0f,	 0.0f,	  1.0f,
-		0.0f,	 0.0f,	  1.0f,
-		0.0f,	 0.0f,	  1.0f,
-		0.0f,	 0.0f,	  1.0f,
-		0.0f,	 0.0f,	  1.0f,
-		0.0f,	 0.0f,	  1.0f,
-		0.0f,	 0.0f,	  1.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
+		0.0f,	 0.0f,	  8.0f,
 		0.0f,	 0.0f,	  1.0f,
 		0.0f,	 0.0f,	  1.0f,
 		0.0f,	 0.0f,	  1.0f,
@@ -593,9 +632,185 @@ void SetupGL() //
 		0.0f,	 0.0f,	  1.0f,
 	};
 
+	static const GLfloat pink_buffer_data[] = {
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	0.6f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		1.0f,	0.0f,	1.0f,
+		
+	};
+
+	static const GLfloat orange_buffer_data[] = {
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.4f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f,
+		1.0f,	0.3f,	0.0f
+	};
+
 	static const GLfloat green_buffer_data[] = {
 
-		0.0f,	 1.0f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
+		0.0f,	 0.8f,	  0.0f,
 		0.0f,	 1.0f,	  0.0f,
 		0.0f,	 1.0f,	  0.0f,
 		0.0f,	 1.0f,	  0.0f,
@@ -646,24 +861,24 @@ void SetupGL() //
 	};
 
 	static const GLfloat yellow_buffer_data[] = {
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
-		1.0f,	 1.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
+		1.0f,	 6.0f,	  0.0f,
 		1.0f,	 1.0f,	  0.0f,
 		1.0f,	 1.0f,	  0.0f,
 		1.0f,	 1.0f,	  0.0f,
@@ -736,5 +951,19 @@ void SetupGL() //
     glBindBuffer(GL_ARRAY_BUFFER, greenbuffer);
     // Give our vertices to OpenGL.
     glBufferData(GL_ARRAY_BUFFER, sizeof(green_buffer_data), green_buffer_data, GL_STATIC_DRAW);
+
+	// Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &orangebuffer);
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, orangebuffer);
+    // Give our vertices to OpenGL.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(orange_buffer_data), orange_buffer_data, GL_STATIC_DRAW);
+
+	// Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &pinkbuffer);
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, pinkbuffer);
+    // Give our vertices to OpenGL.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(pink_buffer_data), pink_buffer_data, GL_STATIC_DRAW);
 
 }
