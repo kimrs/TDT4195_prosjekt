@@ -35,6 +35,7 @@ px1 = 1;
 px2 = 1;
 py1 = 1;
 py2 = 1;
+figure('Name','Hough','NumberTitle','off');imshow(theta);
 
 size_x = size(edges,1);
 size_y = size(edges,2);
@@ -42,15 +43,15 @@ size_y = size(edges,2);
 for i = 1:size(edges,1)
     for j = 1:size(edges,2)
         if(edges(i,j)>0)
-            a = min_rad * cosd(theta(i,j));
-            b = min_rad * sind(theta(i,j));
+            a = min_rad * cos(theta(i,j));
+            b = min_rad * sin(theta(i,j));
             
             if(theta(i,j) < pi/4 && theta(i,j) > -pi/4)
                 dx = ((a > 0) * 2) - 1;
-                dy = dx * tand(theta(i,j));
+                dy = dx * tan(theta(i,j));
             else
                 dy = ((b > 0) * 2) - 1;
-                dx = dy * tand(theta(i,j));
+                dx = dy / tan(theta(i,j));
             end;
             
             while (sqrt(a^2 + b^2) < max_rad)
@@ -60,10 +61,10 @@ for i = 1:size(edges,1)
                 py2 = int32(i + b);
                 
                 if (px1 >= 1 && px1 < size_y && py1 >= 1 && py1 < size_x)
-                    houghDomain(py1,px1) = houghDomain(py1,px1) + magnitude(i,j)./sqrt(a^2+b^2);
+                    houghDomain(py1,px1) = houghDomain(py1,px1) + (magnitude(i,j)./sqrt(a^2+b^2));
                 end;
                 if (px2 >= 1 && px2 < size_y && py2 >= 1 && py2 < size_x)
-                    houghDomain(py2,px2) = houghDomain(py2,px2) + magnitude(i,j)./sqrt(a^2+b^2);
+                    houghDomain(py2,px2) = houghDomain(py2,px2) + (magnitude(i,j)./sqrt(a^2+b^2));
                 end;
                 a = a + dx;
                 b = b + dy;
@@ -76,9 +77,10 @@ end;
 figure('Name','Hough','NumberTitle','off');imshow(houghDomain);
 %houghDomain = conv2(houghDomain,hat,'same');
 houghDomain = movingAverage(houghDomain);
-bitmask = houghDomain > 0.4;
-bitmask = imclose(bitmask,strel('disk',4));
-bitmask = imopen(bitmask,strel('disk',4));
+houghDomain = medianFilter(houghDomain,4);
+bitmask = houghDomain > 0.6;
+% bitmask = imclose(bitmask,strel('disk',4));
+% bitmask = imopen(bitmask,strel('disk',4));
 
 houghDomain(~bitmask) = 0;
 

@@ -20,9 +20,9 @@ function [J, theta, magnitude] = edgeCanny(I, highThresh, lowThresh)
     magnitude = sqrt(Dx.^2+Dy.^2);
     % The direction of edges
     theta = zeros(size(Dx));
-    theta = atand(Dy./Dx);
+    theta = double(atand((Dy./Dx)));
     
-    %figure('Name','Theta','NumberTitle','off'); imshow(theta);
+    figure('Name','Theta','NumberTitle','off'); imshow(theta);
     
     nomaxsup = zeros(size(J,1),size(J,2));
     
@@ -146,6 +146,8 @@ function [J, theta, magnitude] = edgeCanny(I, highThresh, lowThresh)
 %     end;
    
     J = H;
-    theta = ((H > 0).*(theta)./2);
+    theta = theta.*(pi/180);
+    %theta = ((theta./pi)+0.5).*255;
+    theta(~H) = 0;
     
     
