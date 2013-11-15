@@ -76,9 +76,10 @@ for i = 1:size(edges,1)
 end;
 figure('Name','Hough','NumberTitle','off');imshow(houghDomain);
 %houghDomain = conv2(houghDomain,hat,'same');
-houghDomain = movingAverage(houghDomain);
-houghDomain = medianFilter(houghDomain,4);
-bitmask = houghDomain > 0.6;
+%houghDomain = movingAverage(houghDomain);
+houghDomain = medianFilter(houghDomain,10);
+bitmask = houghDomain > 0.9;
+
 % bitmask = imclose(bitmask,strel('disk',4));
 % bitmask = imopen(bitmask,strel('disk',4));
 

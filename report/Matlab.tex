@@ -19,16 +19,16 @@ For example: The blue non-stops are separated by subtracting the green-image fro
 As the green and the blue images look quite alike, the resulting image is mostly black. To be able to further subtract colors from the image, the max values are increased. Red colors are then subtracted from the image.
 \\
 \centerline{\includegraphics[clip=true, trim=40 100 40 80]{separate_step2_1.png}}
-\\*
+\mbox{}\newpage
 Below is the code that generated the resulting image. 
-\lstinputlisting[firstline=20, lastline=26]{../matlab/separateColors.m}
-
+\lstinputlisting[firstline=22, lastline=28]{../matlab/separateColors.m}
+\mbox{}\\
 The image created so far has the blue objects represented as the brightest circles. To remove the unwanted representation of other objects, thresholding is used.
 
 After the thresholding process the image has blobs of pixels, but because of the highlight created by the flashlight, we get holes inside our thresholded sweets. The holes are therefore filled with a inbuilt matlab function, \emph{imfill(image, type)},
 \\
 \lstinputlisting[firstline=80, lastline=80]{../matlab/separateColors.m}
-
+\mbox{}\\
 To remove noise from the images, the images are median filtered. This is done by the function Median filter. 
 \\
 \lstinputlisting{../matlab/medianFilter.m}
@@ -38,14 +38,25 @@ To remove noise from the images, the images are median filtered. This is done by
 Even though the colors now are separated, the binary shape of the sweets is uneven and some of the sweets look like a circle with waves on it. Some of the sweets is therefore hard to detect as circles, as is. This uneveness is resolved by executing a sequence of open and closing filters, with a disk filter,
 \\
 \lstinputlisting[firstline=3, lastline=6]{../matlab/openAndClose.m}
-
+\mbox{}\\
 After all these steps, the final bit-mask will look like this:
 \\ \newline
 \centerline{\includegraphics[scale=0.3]{../results/sweetsA03_blue_sweets.png}}
-
+\mbox{}\\
 \subsection{Circle detection and localization}
-Now that the colored sweets are separated and representated as circular binary objects, the detection of the sweets' centroid and radius can be detected.
+Now that the colored sweets are separated and represented as circular binary objects, the detection of the sweets' centroid and radius can be detected.
 \subsubsection{Canny edge-detector}
+Canny edge detector takes an image and finds the edges based on the gradients found in the image. It also finds the direction of the edges and their magnitude. All this information is passed on to the hough algorithm later on. The gradients is found by convolving the image with a sobel operator,
+\\
+\lstinputlisting[firstline=2, lastline=10]{../matlab/findGradients.m}
+\mbox{}\\
+The magnitude and angle (theta) is calculated for each edge,
+\\
+\lstinputlisting[firstline=20, lastline=23]{../matlab/edgeCanny.m}
+\mbox{}\\
+Now, all those angles has to be detected by their direction in a 8-connected neighbour fashion, and the edges has to be stripped down, so the maximum edge value is preserved, while the other less-valued edge values is thrown away. Next step, the image is thresholded, so the hard edges and soft edges is separated. We then want to find pixels which has low values that's connected to a pixel with a high value, to extend the edges in our edge map. This process is called hysteresis. Now we have a complete edge map, as seen below.
+\\
+\centerline{\includegraphics[scale=0.3]{../results/sweetsA03_edges.png}}
 \subsubsection{Hough circular transform}
 
 \subsection{Improvements}
