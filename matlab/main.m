@@ -39,7 +39,7 @@ end
 [orange_c,orange_r] = imfindcircles(orange_sweets,[2,22]);
 
 % self implemented hough
-C = circlesHough(double(bitmask),3,23);
+%C = circlesHough(double(bitmask),3,23);
 
 %display detected circles
 f = figure('Name','Detected sweets','NumberTitle','off','visible','off'); imshow(originalImg);
