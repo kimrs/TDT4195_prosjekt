@@ -52,16 +52,16 @@ viscircles(orange_c,orange_r,'EdgeColor',[1,0.56,0]);
 detectedSweets = getframe(f);
 
 % Write images to files.
-imwrite(originalImg,['results/' fileToLoad '_original.png']);
-imwrite(maskedImage,['results/' fileToLoad '_masked.png']);
-imwrite(bitmask,['results/' fileToLoad '_total_mask.png']);
-imwrite(detectedSweets.cdata,['results/' fileToLoad '_detected_sweets.png']);
-imwrite(red_sweets,['results/' fileToLoad '_red_sweets.png']);
-imwrite(green_sweets,['results/' fileToLoad '_green_sweets.png']);
-imwrite(blue_sweets,['results/' fileToLoad '_blue_sweets.png']);
-imwrite(yellow_sweets,['results/' fileToLoad '_yellow_sweets.png']);
-imwrite(pink_sweets,['results/' fileToLoad '_pink_sweets.png']);
-imwrite(orange_sweets,['results/' fileToLoad '_orange_sweets.png']);
+% imwrite(originalImg,['results/' fileToLoad '_original.png']);
+% imwrite(maskedImage,['results/' fileToLoad '_masked.png']);
+% imwrite(bitmask,['results/' fileToLoad '_total_mask.png']);
+% imwrite(detectedSweets.cdata,['results/' fileToLoad '_detected_sweets.png']);
+% imwrite(red_sweets,['results/' fileToLoad '_red_sweets.png']);
+% imwrite(green_sweets,['results/' fileToLoad '_green_sweets.png']);
+% imwrite(blue_sweets,['results/' fileToLoad '_blue_sweets.png']);
+% imwrite(yellow_sweets,['results/' fileToLoad '_yellow_sweets.png']);
+% imwrite(pink_sweets,['results/' fileToLoad '_pink_sweets.png']);
+% imwrite(orange_sweets,['results/' fileToLoad '_orange_sweets.png']);
 
 % write coordinates for the circles to file
 % colorstate, radius, x-pos, y-pos
