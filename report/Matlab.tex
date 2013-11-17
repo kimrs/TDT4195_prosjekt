@@ -2,14 +2,14 @@
 \lstset{frame=single}
 \section{Matlab}
 \subsection{Pre-processing}
-Before any objects in our image can be detected as a circle, the image has to be processed in different ways. Each step is described below.
+Before an object in our image can be detected as a circle, the image has to be processed in different ways. Each step is described below.
 
 \subsubsection{Normalize color-values}
-The example pictures has different lightening conditions, one of them e.g., has subtile shadows along the edges of the sweets, the others don't. Most of the sweets in the pictures have shadow on themselves. This often becomes a problem when we try to separate the colored sweets from each other. The way to get around this problem is to normalize the colors as a step before the color separation process. For each color plane, R, G, B, we divide the color-values by the magnitude of the combined R,G,B vector:
+The example pictures has different lightening conditions, one of them e.g., has subtile shadows along the edges of the sweets, the others don't. Most of the sweets in the pictures have shadow on themselves. These shadows often becomes a problem when we try to separate the colored sweets from each other. The way to get around this problem is to normalize the colors as a step before the color separation process. For each color plane, R, G, B, we divide the color-values by the magnitude of the combined R,G,B vector:
 \\
 \lstinputlisting[firstline=4, lastline=6]{../matlab/normalizeColorValues.m}
 \mbox{}\\
-This is resulting in the following image:
+This results into the following image:
 \\
 \centerline{\includegraphics[scale=0.3]{../results/sweetsA03_normalized_colors.png}}
 \mbox{}\\
@@ -29,7 +29,7 @@ Below is the code that generated the resulting image.
 \mbox{}\\
 The image created so far has the blue objects represented as the brightest circles. To remove the unwanted representation of other objects, thresholding is used.
 
-After the thresholding process the image has blobs of pixels, but because of the highlight created by the flashlight, we get holes inside our thresholded sweets. The holes are therefore filled with a inbuilt matlab function, \emph{imfill(image, type)},
+After the thresholding process the image has blobs of pixels, but because of the highlight created by the flashlight, the thresholded sweets has holes inside them. The holes are therefore filled with an inbuilt matlab function, \emph{imfill(image, type)},
 \\
 \lstinputlisting[firstline=80, lastline=80]{../matlab/separateColors.m}
 \mbox{}\\
@@ -62,7 +62,13 @@ Now, all those angles has to be detected by their direction in a 8-connected nei
 \\
 \centerline{\includegraphics[scale=0.3]{../results/sweetsA03_edges.png}}
 \subsubsection{Hough circular transform}
-Now when the edges is detected, we can try detecting the centroids using a hough transform. 
+Now when the edges have been detected, we can try detecting the centroids using a hough transform. Basically we transform each circular edge into local polar coordinates; we read the angle of the edge and walk pixel by pixel in both directions until we get to the max radius defined when the function is called. We add the value of the magnitude of the edge divided by the length to that particular point. This creates a linear fall-off along the edge line. So if the circle is smaller than the max radius, the centeriod should be highlighted, because of all the lines hitting its' center. We end up with an something  similar to the image below.
+\\
+\centerline{\includegraphics[scale=0.3]{stars.png}}
+\\
+This function is work in progress since we chose to use the inbuilt matlab function instead. We basically got the idea from the tech-paper anyways. Futher on, we apply a medianfilter and a thresholding to these star-shaped objects. By doing this we neglate the least important potential centeriods, and get a basis of pixels we can segment and run non-maximal suppression on. If we do so, we would find an approximate centroid for all the circular objects in the scene. The last step would have been to find the radius of each circle as well. 
+\\
+\centerline{\includegraphics[scale=0.3]{dots.png}}
 \subsection{Improvements}
 A more adjustable but computational heavier approach to separate colors in the image, is by filtering. Each matrix would then have to be filtered, to extract the r, g and b values. An appropriate range would have to be set, for this method to work. For example: The blue non-stops in a image would be separated by filtering the values 0 to 50 from the red matrix, 0 to 50 from the green matrix and 205 to 255 from the blue image. A new matrix is then generated. The overlapping values are represented as 1.0 in the new matrix. The remaining values are set to 0.0. \\
 

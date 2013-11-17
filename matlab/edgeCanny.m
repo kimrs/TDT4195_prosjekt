@@ -132,22 +132,9 @@ function [J, theta, magnitude] = edgeCanny(I, highThresh, lowThresh)
             end;
         end;
     end;
-    
-%     for y = 1:size(nomaxsup,2)
-%         for x = 1:size(nomaxsup,1)
-%             if (x-1 > 0 && y-1 > 0 && y+1 < size(nomaxsup,2) && x+1 < size(nomaxsup,1) && L(x,y) == 1)
-%                 if (nomaxsup(x,y) > highThresh || nomaxsup(x-1,y) > highThresh || nomaxsup(x-1,y-1) > highThresh || nomaxsup(x,y-1) > highThresh || nomaxsup(x+1,y) > highThresh || nomaxsup(x+1,y+1) > highThresh || nomaxsup(x,y+1) > highThresh || nomaxsup(x-1,y+1) > highThresh || nomaxsup(x+1,y-1) > highThresh)
-%                     H(x,y) = 1;
-%                 else 
-%                     H(x,y) = 0;
-%                 end;
-%             end;
-%         end;
-%     end;
    
     J = H;
     theta = theta.*(pi/180);
-    %theta = ((theta./pi)+0.5).*255;
     theta(~H) = 0;
     
     

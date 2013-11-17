@@ -4,30 +4,6 @@ function C = circlesHough(I, min_rad, max_rad)
 [edges, theta, magnitude] = edgeCanny(I, 0.2, 0.1);
 figure('Name','edges','NumberTitle','off'); imshow(edges);
 
-% hat = [ 0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1, 0, 0, 0, 0, 0, 0;
-%         0, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0;
-%         0, 0,-1,-1,-1,-2,-3,-3,-3,-3,-3,-2,-1,-1,-1, 0, 0;
-%         0, 0,-1,-1,-2,-3,-3,-3,-3,-3,-3,-3,-2,-1,-1, 0, 0;
-%         0,-1,-1,-2,-3,-3,-3,-2,-3,-2,-3,-3,-3,-2,-1,-1, 0;
-%         0,-1,-2,-3,-3,-3, 0, 2, 4, 2, 0,-3,-3,-3,-2,-1, 0;
-%        -1,-1,-3,-3,-3, 0, 4,10,12,10, 4, 0,-3,-3,-3,-1,-1;
-%        -1,-1,-3,-3,-2, 2,10,18,21,18,10, 2,-2,-3,-3,-1,-1;
-%        -1,-1,-3,-3,-3, 4,12,21,24,21,12, 4,-3,-3,-3,-1,-1;
-%        -1,-1,-3,-3,-2, 2,10,18,21,18,10, 2,-2,-3,-3,-1,-1;
-%        -1,-1,-3,-3,-3, 0, 4,10,12,10, 4, 0,-3,-3,-3,-1,-1;
-%         0,-1,-2,-3,-3,-3, 0, 2, 4, 2, 0,-3,-3,-3,-2,-1, 0;
-%         0,-1,-1,-2,-3,-3,-3,-2,-3,-2,-3,-3,-3,-2,-1,-1, 0;
-%         0, 0,-1,-1,-2,-3,-3,-3,-3,-3,-3,-3,-2,-1,-1, 0, 0;
-%         0, 0,-1,-1,-1,-2,-3,-3,-3,-3,-3,-2,-1,-1,-1, 0, 0;
-%         0, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0;
-%         0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1, 0, 0, 0, 0, 0, 0;];
-    
-hat = [ 0, 0,-1, 0, 0;
-        0,-1,-2,-1, 0;
-       -1,-2,16,-2,-1;
-        0,-1,-2,-1, 0;
-        0, 0,-1, 0, 0;];
-
 houghDomain = zeros(size(I));
 dx = 0;
 dy = 0;
@@ -74,24 +50,15 @@ for i = 1:size(edges,1)
         end;
     end;
 end;
-figure('Name','Hough','NumberTitle','off');imshow(houghDomain);
-%houghDomain = conv2(houghDomain,hat,'same');
-%houghDomain = movingAverage(houghDomain);
-houghDomain = medianFilter(houghDomain,10);
-bitmask = houghDomain > 0.9;
+maxVal = max(houghDomain(:));
+houghDomain = houghDomain./maxVal;
 
-% bitmask = imclose(bitmask,strel('disk',4));
-% bitmask = imopen(bitmask,strel('disk',4));
+figure('Name','Hough','NumberTitle','off');imshow(houghDomain);
+
+houghDomain = medianFilter(houghDomain,6);
+bitmask = houghDomain > 0.2;
 
 houghDomain(~bitmask) = 0;
 
-
-%houghpeaks(houghDomain, 100)
 figure('Name','Hough hotspot','NumberTitle','off');imshow(houghDomain);
 C = 0;
-
-% 
-% #define MAX(a,b) ((a)>(b) ? (a) : (b))
-% #define MIN(a,b) ((a)<(b) ? (a) : (b))
-% #define ABS(a) ((a)>0 ? (a) : -(a))
-% #define SIGN(a) ((a)>0 ? 1 : -1)
