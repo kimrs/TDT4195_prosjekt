@@ -1,7 +1,9 @@
 \documentclass[english, a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
+\usepackage{hyperref}
 \usepackage{graphicx}
+
 \title{Report, Project, TDT4195}
 \author{Kim Rune Solstad, Bjørn Bråthen}
 
@@ -9,11 +11,13 @@
 \maketitle
 
 \section{Abstract}
-This is the report for the main project in the course TDT4195. The assignment was to graphically represent a image with different coloured circular objects using computer-graphics and image-processing techniques. The task was solved in to parts, one image-processing part using Matlab, and one computer-graphics part using OpenGL. The Matlab-script writes a .txt file with coordinates, radius and color of the objects found. The OpenGL program then reads that file and represents the content as different coloured cubes in a three dimensional coordinate system. The programs are further explained in the sections below. 
+This is the report for the main project in the course TDT4195. The assignment was to graphically represent a image with different coloured circular objects using computer-graphics and image-processing techniques. The task was solved in two parts, one image-processing part using Matlab, and one computer-graphics part using OpenGL. The Matlab-script writes a .txt file with coordinates, radius and color of the objects found. The OpenGL program then reads that file and represents the content as different coloured models in a three dimensional coordinate system. The programs are further explained in the sections below. 
 
 \input{Matlab}
 
 \input{OpenGL}
-
+\input{references}
+\newpage
+\input{codefiles}
 
 \end{document}

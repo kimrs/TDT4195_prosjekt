@@ -1,6 +1,6 @@
 function [x, y] = findGradients(I)
-    h = [-1 0 1; -2 0 2; -1 0 1];
-    v = [1 2 1; 0 0 0; -1 -2 -1];
+    w = [-1 0 1; -2 0 2; -1 0 1];
+    h = [1 2 1; 0 0 0; -1 -2 -1];
     
-    x = conv2(I,h,'same');
-    y = conv2(I,v,'same');
+    x = conv2(I,w,'same');
+    y = conv2(I,h,'same');

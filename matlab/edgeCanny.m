@@ -20,9 +20,9 @@ function [J, theta, magnitude] = edgeCanny(I, highThresh, lowThresh)
     magnitude = sqrt(Dx.^2+Dy.^2);
     % The direction of edges
     theta = zeros(size(Dx));
-    theta = atand(Dy./Dx);
+    theta = double(atand((Dy./Dx)));
     
-    %figure('Name','Theta','NumberTitle','off'); imshow(theta);
+    figure('Name','Theta','NumberTitle','off'); imshow(theta);
     
     nomaxsup = zeros(size(J,1),size(J,2));
     
@@ -132,20 +132,9 @@ function [J, theta, magnitude] = edgeCanny(I, highThresh, lowThresh)
             end;
         end;
     end;
-    
-%     for y = 1:size(nomaxsup,2)
-%         for x = 1:size(nomaxsup,1)
-%             if (x-1 > 0 && y-1 > 0 && y+1 < size(nomaxsup,2) && x+1 < size(nomaxsup,1) && L(x,y) == 1)
-%                 if (nomaxsup(x,y) > highThresh || nomaxsup(x-1,y) > highThresh || nomaxsup(x-1,y-1) > highThresh || nomaxsup(x,y-1) > highThresh || nomaxsup(x+1,y) > highThresh || nomaxsup(x+1,y+1) > highThresh || nomaxsup(x,y+1) > highThresh || nomaxsup(x-1,y+1) > highThresh || nomaxsup(x+1,y-1) > highThresh)
-%                     H(x,y) = 1;
-%                 else 
-%                     H(x,y) = 0;
-%                 end;
-%             end;
-%         end;
-%     end;
    
     J = H;
-    theta = ((H > 0).*(theta)./2);
+    theta = theta.*(pi/180);
+    theta(~H) = 0;
     
     

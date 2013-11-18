@@ -1,15 +1,26 @@
 close('all');
-% read in image from file
-originalImg = imread('sweetsA03.png');
 
-% show original
-figure('Name','Original image','NumberTitle','off');imshow(originalImg);
+% the file which we process
+fileToLoad = 'sweetsA03';
+
+% read in image from file
+originalImg = imread([fileToLoad '.png']);
 
 % scale image to 0-1 values
 originalImg = double(originalImg)/255.0;
 
-% do a threshold with moving average filter
-bitmask = optimaThreshold(originalImg);
+% Get the separate color masks.
+seperateColoredObjects = separateColors(originalImg);
+
+red_sweets = seperateColoredObjects(:,:,1);
+green_sweets = seperateColoredObjects(:,:,2);
+blue_sweets = seperateColoredObjects(:,:,3);
+yellow_sweets = seperateColoredObjects(:,:,4);
+pink_sweets = seperateColoredObjects(:,:,5);
+orange_sweets = seperateColoredObjects(:,:,6);
+
+% merge all maskes to one complete mask
+bitmask = red_sweets | green_sweets | blue_sweets | yellow_sweets | pink_sweets | orange_sweets;
 
 % create copy of original
 maskedImage = originalImg;
@@ -19,51 +30,63 @@ for i = 1:1:3
     maskedImage(:,:,i) = double(originalImg(:,:,i).*bitmask);
 end
 
-% Closing and opening filters
-bitmask = imclose(bitmask,strel('disk',1));
-bitmask = imopen(bitmask,strel('disk',8));
-bitmask = imopen(bitmask,strel('disk',8));
-bitmask = imclose(bitmask,strel('disk',1));
+% find sweets in every color
+[red_c,red_r] = imfindcircles(red_sweets,[3,23]);
+[green_c,green_r] = imfindcircles(green_sweets,[2,22]);
+[blue_c,blue_r] = imfindcircles(blue_sweets,[3,23]);
+[yellow_c,yellow_r] = imfindcircles(yellow_sweets,[3,23]);
+[pink_c,pink_r] = imfindcircles(pink_sweets,[3,23]);
+[orange_c,orange_r] = imfindcircles(orange_sweets,[2,22]);
 
-figure('Name','Final masked image','NumberTitle','off');imshow(bitmask);
+% self implemented hough
+%C = circlesHough(double(bitmask),3,23);
 
-% show seperate RGB layers
-% figure('Name','Channels','NumberTitle','off'); subplot(3,1,1); imshow(originalImg(:,:,1));
-% subplot(3,1,2); imshow(originalImg(:,:,2));
-% subplot(3,1,3); imshow(originalImg(:,:,3));
-
-% convert to gray image values.
-grayImg = rgb2gray(maskedImage);
-
-figure('Name','Gray Image','NumberTitle','off'); imshow(grayImg);
-
-% find sweets
-[c,r] = imfindcircles(bitmask,[30,30]);
-
-cc=1:80; 
-rr=cc.';
-
-cx1=40; cy1=40; R1=20;
-
-
-f=@(xx,yy) (xx-cx1).^2+(yy-cy1).^2 <=R1^2; 
- 
-
-circ=bsxfun(f,rr,cc); %Logical map of 2 circles
-size(circ)
-%C = circlesHough(double(circ),5,15);
-C = circlesHough(gaussian(rgb2gray(originalImg),8,2.5),10,30);
-%figure(); imshow(l);
 %display detected circles
-figure('Name','Detected sweets','NumberTitle','off'); imshow(originalImg);viscircles(c,r);
+f = figure('Name','Detected sweets','NumberTitle','off','visible','off'); imshow(originalImg);
+viscircles(red_c,red_r,'EdgeColor','r');
+viscircles(green_c,green_r,'EdgeColor','g');
+viscircles(blue_c,blue_r,'EdgeColor','b');
+viscircles(yellow_c,yellow_r,'EdgeColor','yellow');
+viscircles(pink_c,pink_r,'EdgeColor',[1,0.4,0.6]);
+viscircles(orange_c,orange_r,'EdgeColor',[1,0.56,0]);
+detectedSweets = getframe(f);
+
+% Write images to files.
+% imwrite(originalImg,['results/' fileToLoad '_original.png']);
+% imwrite(maskedImage,['results/' fileToLoad '_masked.png']);
+% imwrite(bitmask,['results/' fileToLoad '_total_mask.png']);
+% imwrite(detectedSweets.cdata,['results/' fileToLoad '_detected_sweets.png']);
+% imwrite(red_sweets,['results/' fileToLoad '_red_sweets.png']);
+% imwrite(green_sweets,['results/' fileToLoad '_green_sweets.png']);
+% imwrite(blue_sweets,['results/' fileToLoad '_blue_sweets.png']);
+% imwrite(yellow_sweets,['results/' fileToLoad '_yellow_sweets.png']);
+% imwrite(pink_sweets,['results/' fileToLoad '_pink_sweets.png']);
+% imwrite(orange_sweets,['results/' fileToLoad '_orange_sweets.png']);
 
 % write coordinates for the circles to file
 % colorstate, radius, x-pos, y-pos
+%fileName = [fileToLoad '_test.txt'];
 fileName = 'test.txt';
+
 fileId = fopen(fileName,'w');
 if fileId ~= -1
-    for i = 1:size(c,1)
-      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',1,int16(r(i,1)),int16(c(i,1)),int16(c(i,2)));
+    for i = 1:size(red_c,1)
+      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',1,int16(red_r(i,1)),int16(red_c(i,1)),int16(red_c(i,2)));
+    end;
+    for i = 1:size(green_c,1)
+      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',2,int16(green_r(i,1)),int16(green_c(i,1)),int16(green_c(i,2)));
+    end;
+    for i = 1:size(blue_c,1)
+      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',3,int16(blue_r(i,1)),int16(blue_c(i,1)),int16(blue_c(i,2)));
+    end;
+    for i = 1:size(yellow_c,1)
+      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',4,int16(yellow_r(i,1)),int16(yellow_c(i,1)),int16(yellow_c(i,2)));
+    end;
+    for i = 1:size(pink_c,1)
+      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',5,int16(pink_r(i,1)),int16(pink_c(i,1)),int16(pink_c(i,2)));
+    end;
+    for i = 1:size(orange_c,1)
+      fprintf(fileId,'%d%d%4.4d%4.4d\r\n',6,int16(orange_r(i,1)),int16(orange_c(i,1)),int16(orange_c(i,2)));
     end;
     fclose(fileId);
 end
