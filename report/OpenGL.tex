@@ -3,8 +3,8 @@
 The program created for this part of the assignment, 
 is made by modifying code given to us for the graphics part of the course. 
 The color-buffers and the vertex-buffer is created in the initialization phase. 
-For each frame, RenderScene is called. 
-The txt-file is read once for each object everytime RenderScene is called.
+For each frame drawn, RenderScene is called. Most of the important code is found inside that function.
+The txt-file is read once for each object everytime RenderScene is called. This could perhaps have been more efficient. But as the program did not seem to slow down because of it, no changes where made.
 The text-file is read using ReadFile.cpp.
 ReadFile uses the windows library conio.h to read the file. 
 The read function used to get the values, requires an integer representing a line in the .txt as input.
@@ -30,12 +30,19 @@ The process is repeated until all objects are represented.
 below is a screenshot taken from the program running.
 \\
 \includegraphics[scale=0.75]{Screen1.png}
-
+\\
+The shapes are counted once when the program starts. 
+\lstinputlisting[firstline=751, lastline=783]{../opengl/visuals.cpp}
+To display the numbers, a vertexbuffer is created for the numbers 0 to 9. To number-buffers are drawn when the shape is drawn. The highest number the program is able to display is 99. One mvp-matrix is created for each number. The rotation matrix rotates the number about the y-axis. The rotation speed is determined by a counter. 
+\\
+\includegraphics[scale=0.75]{with_numbers.png}
+\\
 
 \subsection{Improvements}
 Today, the cubes are given color by static pre-made color-buffers. 
 To support all colors, one buffer for each different color given in the input-file should be made. 
 A solution like that was considered, but not pursued.
 Lack of experience programming in the C-language, resulted in our program not being able to support dynamically made colorbuffers.
-
+\\
+The matrices could have been better structured using the joining techniques from lab4. However the requirement of having numbers where noticed late and other projects might have been prioriticed at this moment. 
 

@@ -29,7 +29,7 @@ Below is the code that generated the resulting image.
 \mbox{}\\
 The image created so far has the blue objects represented as the brightest circles. To remove the unwanted representation of other objects, thresholding is used.
 
-After the thresholding process the image has blobs of pixels, but because of the highlight created by the flashlight, the thresholded sweets has holes inside them. The holes are therefore filled with an inbuilt matlab function, \emph{imfill(image, type)},
+After the thresholding process the image has blobs of pixels, but because of the highlight created by the flashlight, the thresholded sweets has holes inside. The holes are filled using a inbuilt matlab function, \emph{imfill(image, type)},
 \\
 \lstinputlisting[firstline=80, lastline=80]{../matlab/separateColors.m}
 \mbox{}\\
@@ -39,7 +39,7 @@ To remove noise from the images, the images are median filtered. This is done by
 
 \centerline{\includegraphics[clip=true, trim=40 100 40 80]{separate_step3_1.png}}
 
-Even though the colors now are separated, the binary shape of the sweets is uneven and some of the sweets look like a circle with waves on it. Some of the sweets is therefore hard to detect as circles, as is. This uneveness is resolved by executing a sequence of open and closing filters, with a disk filter,
+Even though the colors now are separated, the binary shape of the sweets are uneven and some of the sweets look like a circle with waves on it. Some of the sweets is therefore hard to detect as circles, as is. This uneveness is resolved by executing a sequence of open and closing filters, with a disk filter,
 \\
 \lstinputlisting[firstline=3, lastline=6]{../matlab/openAndClose.m}
 \mbox{}\\
@@ -63,7 +63,7 @@ Now, all those angles has to be detected by their direction in a 8-connected nei
 
 \centerline{\includegraphics[scale=0.3]{../results/sweetsA03_edges.png}}
 \subsubsection{Hough circular transform}
-Now when the edges have been detected, we can try detecting the centroids using a hough transform. Basically we transform each circular edge into local polar coordinates; we read the angle of the edge and walk pixel by pixel in both directions until we get to the max radius defined when the function is called. We add the value of the magnitude of the edge divided by the length to that particular point. This creates a linear fall-off along the edge line. So if the circle is smaller than the max radius, the centeriod should be highlighted, because of all the lines hitting its' center. We end up with an something  similar to the image below.
+Now when the edges have been detected, we can try detecting the centroids using a hough transform. Basically we transform each circular edge into local polar coordinates; we read the angle of the edge and walk pixel by pixel in both directions until we get to the max radius defined when the function is called. We add the value of the magnitude of the edge divided by the length to that point. This creates a linear fall-off along the edge line. So if the circle is smaller than the max radius, the centeriod should be highlighted, because of all the lines hitting its' center. We end up with an something  similar to the image below.
 
 \\
 \centerline{\includegraphics[scale=0.3]{stars.png}}
