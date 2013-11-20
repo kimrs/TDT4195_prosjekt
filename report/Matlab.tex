@@ -58,19 +58,16 @@ The magnitude and angle (theta) is calculated for each edge,
 \\
 \lstinputlisting[firstline=20, lastline=23]{../matlab/edgeCanny.m}
 \mbox{}\\
-Now, all those angles has to be detected by their direction in a 8-connected neighbour fashion, and the edges has to be stripped down, so the maximum edge value is preserved, while the other less-valued edge values is thrown away. Next step, the image is thresholded, so the hard edges and soft edges is separated. We then want to find pixels which has low values that's connected to a pixel with a high value, to extend the edges in our edge map. This process is called hysteresis. Now we have a complete edge map, as seen below. For more insight in this process, see \emph{edgeCanny.m}.
-\\
+Now, all those angles has to be detected by their direction in a 8-connected neighbour fashion, and the edges has to be stripped down, so the maximum edge value is preserved, while the other less-valued edge values is thrown away. Next step, the image is thresholded, so the hard edges and soft edges is separated. We then want to find pixels which has low values that's connected to a pixel with a high value, to extend the edges in our edge map. This process is called hysteresis. Now we have a complete edge map, as seen below. For more insight in this process, see \emph{edgeCanny.m}.\\
 
 \centerline{\includegraphics[scale=0.3]{../results/sweetsA03_edges.png}}
 \subsubsection{Hough circular transform}
-Now when the edges have been detected, we can try detecting the centroids using a hough transform. Basically we transform each circular edge into local polar coordinates; we read the angle of the edge and walk pixel by pixel in both directions until we get to the max radius defined when the function is called. We add the value of the magnitude of the edge divided by the length to that point. This creates a linear fall-off along the edge line. So if the circle is smaller than the max radius, the centeriod should be highlighted, because of all the lines hitting its' center. We end up with an something  similar to the image below.
-
-\\
+Now when the edges have been detected, we can try detecting the centroids using a hough transform. Basically we transform each circular edge into local polar coordinates; we read the angle of the edge and walk pixel by pixel in both directions until we get to the max radius defined when the function is called. We add the value of the magnitude of the edge divided by the length to that point. This creates a linear fall-off along the edge line. So if the circle is smaller than the max radius, the centeriod should be highlighted, because of all the lines hitting its' center. We end up with an something  similar to the image below.\\
 \centerline{\includegraphics[scale=0.3]{stars.png}}
-\\
+\mbox{}\\
 This function is work in progress since we chose to use the inbuilt matlab function instead. We basically got the idea from the tech-paper anyways. Futher on, we apply a medianfilter and a thresholding to these star-shaped objects. By doing this we neglate the least important potential centeriods, and get a basis of pixels we can segment and run non-maximal suppression on. If we do so, we would find an approximate centroid for all the circular objects in the scene. The last step would have been to find the radius of each circle as well. 
 \\
 \centerline{\includegraphics[scale=0.3]{dots.png}}
 \subsection{Improvements}
-A more adjustable but computational heavier approach to separate colors in the image, is by filtering. Each matrix would then have to be filtered, to extract the r, g and b values. An appropriate range would have to be set, for this method to work. For example: The blue non-stops in a image would be separated by filtering the values 0 to 50 from the red matrix, 0 to 50 from the green matrix and 205 to 255 from the blue image. A new matrix is then generated. The overlapping values are represented as 1.0 in the new matrix. The remaining values are set to 0.0. \\
+A more adjustable but computational heavier approach to separate colors in the image, is by filtering. Each matrix would then have to be filtered, to extract the r, g and b values. An appropriate range would have to be set, for this method to work. For example: The blue non-stops in a image would be separated by filtering the values 0 to 50 from the red matrix, 0 to 50 from the green matrix and 205 to 255 from the blue image. A new matrix is then generated. The overlapping values are represented as 1.0 in the new matrix. The remaining values are set to 0.0.\\
 

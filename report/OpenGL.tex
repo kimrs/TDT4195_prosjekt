@@ -17,7 +17,7 @@ Each cube needs four parameters to be represented.
 One for color, one for radius, one for the x-coordinate and one for the y-coordinate. The format in the exchange file looks like this:
 \\
 \lstinputlisting[lastline=2]{../test.txt}
-\\
+\mbox{}\\
 The fist line represents a shape with the following parameters:
 \\color: red(1), radius=11, coord-x=300, coord-y=76.
 \\
@@ -30,13 +30,13 @@ The process is repeated until all objects are represented.
 below is a screenshot taken from the program running.
 \\
 \includegraphics[scale=0.75]{Screen1.png}
-\\
+\mbox{}\\
 The shapes are counted once when the program starts. 
 \lstinputlisting[firstline=751, lastline=783]{../opengl/visuals.cpp}
 To display the numbers, a vertexbuffer is created for the numbers 0 to 9. To number-buffers are drawn when the shape is drawn. The highest number the program is able to display is 99. One mvp-matrix is created for each number. The rotation matrix rotates the number about the y-axis. The rotation speed is determined by a counter. 
 \\
 \includegraphics[scale=0.75]{with_numbers.png}
-\\
+\mbox{}\\
 
 \subsection{Improvements}
 Today, the cubes are given color by static pre-made color-buffers. 
